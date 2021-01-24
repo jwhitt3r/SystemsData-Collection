@@ -13,7 +13,7 @@ pid1 = int(8914) # Place the process you want to monitor, e.g., 8914
 pid2 = int(9662) # Place the process you want to monitor, e.g., 8914
 process1 = psutil.Process(pid1)
 process2 = psutil.Process(pid2)
-duration = 61
+duration = 61 # Define how long you would like to capture the data for, in this case a minute.
 log1 = {'cpu': [], 'times': [], 'memory' : [], 'virtual' : []}
 log2 = {'cpu': [], 'times': [], 'memory' : [], 'virtual' : []}
 
@@ -21,6 +21,7 @@ log2 = {'cpu': [], 'times': [], 'memory' : [], 'virtual' : []}
 """
 Capture the data for the processes
 """
+
 while True:
     current_time = time.time()
 
@@ -33,6 +34,10 @@ while True:
     process2_current_mem = process2.memory_info()
     process2_current_mem_real = process2_current_mem.rss / 1024. ** 2
     process2_current_mem_virtual = process2_current_mem.vms / 1024. ** 2
+
+    """
+    For the duration of the test, append data to the dictionary.
+    """
 
     if current_time - start_time < duration:
         
@@ -48,19 +53,12 @@ while True:
     else:
         break
 
-print(psutil.cpu_count())
-print(start_time)
-print(current_time)
-print(log1.values())
-print(log2.values())
-
-
-
 fig = plt.figure(figsize=(10,5))
 
 """
 Define the structure of the plot for process 1.
 """
+
 p1_ax1 = fig.add_subplot(2,1,1)
 p1_ax1.title.set_text('CPU Usage and Real Memory Usage over a ' + str(duration-1) + ' second duration \n for the Process: ' + process1.name())
 p1_ax1.plot(log1['times'], log1['cpu'], '-', lw=1, color='r')
@@ -77,6 +75,7 @@ p1_ax2.grid()
 """
 Define the structure of the plot for process 2.
 """
+
 p2_ax1 = fig.add_subplot(2,1,2)
 p2_ax1.title.set_text('CPU Usage and Real Memory Usage over a ' + str(duration-1) + ' second duration \n for the Process: ' + process2.name())
 p2_ax1.plot(log2['times'], log2['cpu'], '-', lw=1, color='r')
@@ -92,5 +91,6 @@ p2_ax2.grid()
 """
 Output and save the figure combining both process 1 and process 2's data.
 """
+
 plt.tight_layout()
 plt.savefig('plot.png', dpi=600)
