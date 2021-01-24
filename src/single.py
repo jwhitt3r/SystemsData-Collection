@@ -2,9 +2,14 @@ import psutil
 import matplotlib.pyplot as plt
 import time
 
+"""
+Single.py monitors a single process specified within pid1, to show systems usage (CPU, Real Memory, and Virtual Memory) 
+usage over a period of time. The collected data is then visualised onto a graph via matplotlib and saved as plot.png
+"""
+
 start_time = time.time()
 
-pid1 = int(8914)
+pid1 = int() # Place the process you want to monitor, e.g., 8914
 process1 = psutil.Process(pid1)
 duration = 5
 log1 = {'cpu': [], 'times': [], 'memory' : [], 'virtual' : []}
